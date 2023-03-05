@@ -1,0 +1,113 @@
+{% extends 'base.html' %} {% block content %} {% load cart %} {% load custom_filter %}
+<!-- body -->
+<html>
+  <div class="container-fluid mt-3">
+    <div class="row">
+      <!-- filter -->
+
+      <div class="col-lg-3 mx-auto">
+        <div class="list-group">
+          <a href="/" class="list-group-item list-group-item-action btn btn-outline-success">Todos</a>
+
+          {% for categoria in categorias %}
+          <a href="/?categoria={{categoria.id}}" class="list-group-item list-group-item-action btn btn-outline-success">{{categoria.nome}}</a>
+          {% endfor %}
+        </div>
+      </div>
+
+      <!-- all products -->
+      <div id="produtos" class="col-lg-9 mx-auto">
+        <div class="row mx-auto">
+          {% for produto in produtos %}
+          <div class="card mx-4 mb-3" id="{{produto.id}}" style="width: 18rem">
+            {% load static %}
+            <img class="card-img-top" style="max-height: 400px; min-height: 400px" src="{{produto.image.url}}" alt="Card image cap" />
+            <div class="card-body">
+              <p class="card-title">{{produto.name}}</p>
+              {% if produto.category.nome != 'Bolsas' %}
+              <div style="display: flex; justify-content: left" class="mb-2">
+                {% if produto.Tamanho_P %}
+                <button href="/" id="{{produto.id}},P" onclick="markSelected('{{produto.id}},P')" style="padding: 0px 18px -1px 0px" class="btn bg-light">
+                  P
+                </button>
+                {% endif %} {% if produto.Tamanho_M %}
+                <button href="/" id="{{produto.id}},M" onclick="markSelected('{{produto.id}},M')" style="padding: 0px 18px -1px 0px" class="btn bg-light">
+                  M
+                </button>
+                {% endif %} {% if produto.Tamanho_G %}
+                <button href="/" id="{{produto.id}},G" onclick="markSelected('{{produto.id}},G')" style="padding: 0px 18px -1px 0px" class="btn bg-light">
+                  G
+                </button>
+                {% endif %}
+              </div>
+              {% endif %}
+              <p class="card-text"><b>{{produto.price|currency}}</b></p>
+              <!-- {{produto | is_in_cart:request.session.cart }} -->
+            </div>
+
+            <div class="card-footer p-0 no-gutters">
+              {% if produto|is_in_cart:request.session.cart %}
+              <div class="row no-gutters">
+                <form action="/#{{produto.id}}" class="col-2" method="post">
+                  {% csrf_token %}
+                  <input type="text" class="d-none" name="url" value="{{request.get_full_path}}" />
+                  <input hidden type="text" name="produto" value="{{produto.id}}" />
+                  <input hidden type="text" name="remove" value="True" />
+                  <input type="submit" value=" - " class="btn btn-block btn-success border-right" />
+                </form>
+                <div class="col btn btn-success">{{produto|cart_quantity:request.session.cart}} No Carrinho</div>
+                <form action="/#{{produto.id}}" class="col-2" method="post">
+                  {% csrf_token %}
+                  <input type="text" class="d-none" name="url" value="{{request.get_full_path}}" />
+                  <input hidden type="text" name="produto" value="{{produto.id}}" />
+                  <input type="submit" value=" + " class="btn btn-block btn-success border-left" />
+                </form>
+              </div>
+
+              {% else %}
+              <form action="/#{{produto.id}}" method="post" class="btn-block" onsubmit="return validateForm()">
+                {% csrf_token %}
+                <input type="text" class="d-none" id="size" name="sizes" value="{{request.session.size|size_value}}" />
+                <input type="text" class="d-none" name="url" value="{{request.get_full_path}}" />
+                <input hidden type="text" name="produto" value="{{produto.id}}" />
+                <input type="submit" class="float-right btn btn-success form-control" value="Colocar no Carrinho" />
+              </form>
+              {% endif %}
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+  </div>
+  <script>
+    ChoseSize = false;
+    previousId = null;
+    function markSelected(id) {
+      prevButton = document.getElementById(previousId);
+      if (prevButton) {
+        prevButton.className = "btn bg-light";
+        prevButton.style.backgroundColor = "";
+      }
+      element = document.getElementById(id);
+      element.className = "btn";
+      element.style.backgroundColor = "#dae0e5";
+      previousId = id;
+      idArray = id.split(",");
+      fetch(`/?size=${idArray[1]}`, {
+        method: "GET",
+      });
+      ChoseSize = true;
+    }
+
+    function validateForm() {
+      if (ChoseSize != false) {
+        ChoseSize = false;
+        return true;
+      }
+      alert("Por favor, selecione o tamanho desejado");
+      return false;
+    }
+  </script>
+</html>
+{% endblock %}

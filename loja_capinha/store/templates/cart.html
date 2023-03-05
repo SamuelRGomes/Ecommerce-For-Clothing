@@ -1,0 +1,81 @@
+{% extends 'base.html' %} {% block content %} {% load cart %} {% load custom_filter %}
+<html>
+  <div class="container">
+    <div class="border rounded p-4 m-4">
+      <p class="display-4 pl-3 btn btn-success rounded-pill botao_carrinho">Seu Carrinho</p>
+      <hr />
+      <table class="table">
+        <thead>
+          <tr>
+            <th>No.</th>
+            <th>Imagem</th>
+            <th>Produto</th>
+            <th>Tamanho</th>
+            <th>Preço</th>
+            <th>Quantidade</th>
+            <th>Total</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for produto in produtos %}
+          <tr>
+            <td>{{forloop.counter}}</td>
+            <td><img style="height: 80px" src="{{produto.image.url}}" alt="" /></td>
+            <td>{{produto.name}}</td>
+            <td>{{produto|product_size:request.session.sizes}}</td>
+            <td>{{produto.price|currency}}</td>
+            <td>{{produto|cart_quantity:request.session.cart}}</td>
+            <td>{{produto|price_total:request.session.cart|currency}}</td>
+          </tr>
+
+          {% endfor %}
+        </tbody>
+
+        <tfoot>
+          <tr>
+            <th colspan="4"></th>
+            <th class="" colspan="">Total</th>
+            <th>{{produtos|total_cart_price:request.session.cart|currency}}</th>
+          </tr>
+        </tfoot>
+      </table>
+      <hr />
+      {%if produtos.count > 0 %}
+      <div class="m-3 p-3">
+        <a href="#" onclick="finalize()" data-toggle="modal" data-target="#exampleModal" class="btn btn-outline-success border rounded col-lg-3 float-right"
+          >Finalizar Compra</a
+        >
+      </div>
+      {%endif%}
+    </div>
+  </div>
+  </div>
+
+  <script>
+   function finalize(){
+    window.location.replace('address')
+   }
+    {% comment %} fetch("/create-checkout-session/", {
+      method: "POST",
+    })
+      .then(function (response) {
+        return response.json();
+      })
+      .then(function (session) {
+        return stripe.redirectToCheckout({ sessionId: session.id });
+      })
+      .then(function (result) {
+        // If `redirectToCheckout` fails due to a browser or network
+        // error, you should display the localized error message to your
+        // customer using `error.message`.
+        if (result.error) {
+          alert(result.error.message);
+        }
+      })
+      .catch(function (error) {
+        console.error("Error:", error);
+      }); {% endcomment %}
+  </script>
+ 
+</html>
+{% endblock %}

@@ -1,0 +1,206 @@
+{% load custom_filter %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+
+    <!-- Bootstrap CSS -->
+
+    <link
+      rel="stylesheet"
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+      integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+      crossorigin="anonymous"
+    />
+    <title>Stars Collection</title>
+  </head>
+
+  <body>
+    <!-- navbar -->
+
+    <nav class="one-edge-shadow navbar navbar-light sticky-top navbar navbar-expand-lg text-white">
+      <div>
+        <a class="navbar-brand ms-3 text-light" href="/">
+          <link
+            rel="stylesheet"
+            href="https://use.fontawesome.com/releases/v5.7.0/css/all.css"
+            integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ"
+            crossorigin="anonymous"
+          />
+          Stars Collection</a
+        >
+        <img class="logo-img" id="logo-img" src="https://stars-collection.s3.sa-east-1.amazonaws.com/media/stars-transparent-logo.png" />
+      </div>
+      <div class="carrinho-fixo" id="carrinho-fixo">
+        <ul class="navbar-nav mr-auto">
+          <li>
+            <img
+              src="https://stars-collection.s3.sa-east-1.amazonaws.com/media/WhatsApp+Image+2023-02-28+at+18.12.16.jpeg"
+              style="width: 20px; height: 20px; color: text-light"
+              class="me-1 marginFree bg-light carrinho-small"
+            />
+          </li>
+          <li class="nav-item active">
+            <a class="nav-link text-light carrinho-label" href="/cart"
+              >Carrinho
+              <span class="badge badge-success">{{request.session.cart.keys|length}}</span>
+            </a>
+          </li>
+        </ul>
+      </div>
+      <button
+        id="navbar-toggler"
+        onclick="toggled()"
+        class="navbar-toggler"
+        type="button"
+        data-toggle="collapse"
+        data-target="#navbarSupportedContent"
+        aria-controls="navbarSupportedContent"
+        aria-expanded="false"
+        aria-label="Toggle navigation"
+      >
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        {% if request.session.email != 'administrador@admin.com' %}
+        <ul class="navbar-nav mr-auto" id="outer-selection">
+          <li class="nav-item active">
+            <a class="nav-link text-light" href="/store">Seleção de produtos </a>
+          </li>
+        </ul>
+        {% endif %}
+        <ul class="navbar-nav my-2 my-lg-0">
+          {% if request.session.email != 'administrador@admin.com' %}
+          <ul class="navbar-nav mr-auto d-none" id="inner-selection">
+            <li class="nav-item active">
+              <a class="nav-link text-light" href="/store">Seleção de produtos </a>
+            </li>
+          </ul>
+          {% endif %} {% if request.session.email != 'administrador@admin.com' %}
+          <li class="cart-collapse">
+            <img
+              src="https://stars-collection.s3.sa-east-1.amazonaws.com/media/WhatsApp+Image+2023-02-28+at+18.12.16.jpeg"
+              style="width: 20px; height: 20px; color: text-light"
+              class="me-1 marginFree bg-light cart-logo-img"
+            />
+          </li>
+          <li class="nav-item active cart-collapse">
+            <a class="nav-link text-light" href="/cart"
+              >Carrinho
+              <span class="badge badge-success">{{request.session.cart.keys|length}}</span>
+            </a>
+          </li>
+          {% endif %} {% if request.session.customer %} {% if request.session.email != 'administrador@admin.com' %}
+          <li class="nav-item active">
+            <a class="nav-link text-light" href="/orders">Meus Pedidos</a>
+          </li>
+          {% else %}
+          <li class="nav-item active">
+            <a class="nav-link" href="/order-fulfillment">Entrega Pendente</a>
+          </li>
+          <li class="nav-item active">
+            <a class="nav-link text-light" href="/orders-fulfilled">Pedidos Finalizados</a>
+          </li>
+          {% endif %}
+          <li class="nav-item active">
+            <a class="nav-link text-light" href="/logout">Logout</a>
+          </li>
+          {% else %}
+
+          <li class="nav-item active">
+            <a class="nav-link text-light" href="/signup">Crie sua conta</a>
+          </li>
+          <li class="nav-item active">
+            <a class="nav-link text-light" href="/login">Login</a>
+          </li>
+          {% endif %}
+        </ul>
+      </div>
+    </nav>
+    <!---->
+    {% block content %}{% endblock %}
+    <script>
+      let toggleActive = true;
+      function toggled() {
+        element = document.getElementById("carrinho-fixo");
+        element.classList.toggle("d-none");
+        element = document.getElementById("inner-selection");
+        element.classList.toggle("d-none");
+        element = document.getElementById("outer-selection");
+        element.classList.toggle("d-none");
+        element4 = document.getElementById("logo-img");
+        element4.classList.toggle("logo-img-toggle");
+      }
+    </script>
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script
+      src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+      integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+      integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+      integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+      crossorigin="anonymous"
+    ></script>
+  </body>
+  <style>
+    .carrinho-fixo {
+      display: none;
+    }
+    .logo-img {
+      margin-left: 165px;
+      width: 80px;
+      position: absolute;
+      top: -7px;
+    }
+    nav {
+      background-color: silver;
+    }
+    .one-edge-shadow {
+      box-shadow: 0 8px 2px -5px rgb(246, 245, 245);
+    }
+    .display-8 {
+      font-weight: 200;
+      font-size: 30px;
+      font-colour: $teal-200;
+    }
+    .marginFree {
+      margin-top: 11px;
+    }
+    @media screen and (max-width: 991.2px) {
+      .carrinho-small {
+        position: absolute;
+        left: 165px;
+        top: 8px;
+      }
+      .carrinho-fixo {
+        margin-left: -580px;
+        display: block;
+      }
+      .cart-collapse {
+        display: none;
+      }
+      .carrinho-label {
+        position: absolute;
+        left: 195px;
+        top: 8px;
+      }
+      .logo-img {
+        margin-left: 125px;
+      }
+      .logo-img-toggle {
+        margin-left: 5px;
+      }
+    }
+  </style>
+</html>

@@ -1,0 +1,309 @@
+{% extends 'base.html' %} {% block content %} {% load cart %} {% load custom_filter %}
+<html>
+  <head>
+    <script src="https://code.jquery.com/jquery-3.6.3.min.js" integrity="sha256-pvPw+upLPUjgMXY0G+8O0xUf+/Im1MZjXxxgOcBQBXU=" crossorigin="anonymous"></script>
+  </head>
+  <div class="container">
+    <div class="border surround-stuff rounded">
+      <p class="pedidos">Pedidos Finalizados</p>
+      <hr />
+      <table class="table">
+        <thead>
+          <tr>
+            <th>No.</th>
+            <th>Imagem</th>
+            <th>Endereço</th>
+            <th>Telefone</th>
+            <th>Produto</th>
+            <th>Data</th>
+            <th>Preço</th>
+            <th>Quantidade</th>
+            <th>Total</th>
+            <th>Status</th>
+            <th>Entrega</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for order in orders %} {% if order.status == True%}
+          <tr>
+            <td>{{forloop.counter}}</td>
+            <td><img class="cart-img" src="{{order.product.image.url}}" alt="" /></td>
+            <td>{{order.address}}</td>
+            <td>{{order.phone}}</td>
+            <td>{{order.product.name}}</td>
+            <td><nobr>{{order.date}}</nobr></td>
+            <td><nobr>{{order.price|currency}}</nobr></td>
+            <td class="text-center">{{order.quantity}} unidades</td>
+            <td><nobr>{{order.quantity|multiply:order.price|currency}}</nobr></td>
+            <td>
+              <small class="badge badge-success">Confirmado</small>
+            </td>
+            <td>
+              <nobr>
+                <label for="">Concluída</label>
+              </nobr>
+            </td>
+            {% endif %}
+          </tr>
+
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <script>
+    function confirmOrder(orderId) {
+      form = document.getElementById("confirmOrder");
+      form.submit();
+    }
+  </script>
+  <style>
+    .confirmarLabel {
+      font-size: 15px;
+    }
+    .pedidos {
+      font-size: 26px;
+    }
+    .cart-img {
+      width: 50px;
+      height: 40px;
+    }
+    .border {
+      margin: 24px;
+      padding: 24px;
+    }
+    @media screen and (max-width: 1220px) {
+      .pedidos {
+        font-size: 16px;
+      }
+      th {
+        font-size: 14px;
+      }
+      td {
+        font-size: 14px;
+      }
+
+      .table {
+        width: 100%;
+      }
+    }
+    @media screen and (max-width: 1200px) {
+      .surround-stuff {
+        width: 1000px;
+        margin-left: -40px;
+      }
+      .pedidos {
+        font-size: 16px;
+      }
+      th {
+        font-size: 14px;
+      }
+      td {
+        font-size: 14px;
+      }
+
+      .table {
+        width: 100%;
+      }
+    }
+    @media screen and (max-width: 1027px) {
+      .surround-stuff {
+        width: 1000px;
+        margin-left: -35px;
+      }
+      .pedidos {
+        font-size: 16px;
+      }
+      th {
+        font-size: 14px;
+      }
+      td {
+        font-size: 14px;
+      }
+
+      .table {
+        width: 100%;
+      }
+      .confirmarLabel {
+        font-size: 12px;
+      }
+    }
+    @media screen and (max-width: 995px) {
+      .surround-stuff {
+        width: 850px;
+        margin-left: -100px;
+      }
+
+      th {
+        font-size: 12px;
+      }
+      td {
+        font-size: 12px;
+      }
+      .cart-img {
+        width: 35px;
+        height: 35px;
+      }
+
+      .table {
+        width: 100%;
+      }
+    }
+    @media screen and (max-width: 905px) {
+      .surround-stuff {
+        width: 800px;
+        margin-left: -40px;
+      }
+      th {
+        font-size: 10px;
+      }
+      td {
+        font-size: 10px;
+      }
+    }
+    @media screen and (max-width: 905px) {
+      .surround-stuff {
+        width: 800px;
+        margin-left: -55px;
+      }
+    }
+    @media screen and (max-width: 785px) {
+      .surround-stuff {
+        width: 750px;
+        margin-left: -31px;
+      }
+      .container {
+        width: 100%;
+      }
+      th {
+        font-size: 10px;
+      }
+      td {
+        font-size: 10px;
+      }
+
+      .table {
+        width: 100%;
+      }
+      .cart-img {
+        width: 30px;
+        height: 30px;
+      }
+    }
+    @media screen and (max-width: 768px) {
+      .surround-stuff {
+        width: 705px;
+        margin-left: -91px;
+      }
+      th {
+        font-size: 9px;
+      }
+      td {
+        font-size: 9px;
+      }
+      .tamanho-letra {
+        font-size: 10px;
+      }
+    }
+    @media screen and (max-width: 727px) {
+      .surround-stuff {
+        width: 665px;
+        margin-left: -91px;
+      }
+      th {
+        font-size: 8px;
+      }
+      td {
+        font-size: 8px;
+      }
+    }
+
+    @media screen and (max-width: 659px) {
+      .surround-stuff {
+        width: 625px;
+        margin-left: -62px;
+      }
+      .container {
+        width: 60%;
+        margin-left: 60px;
+      }
+      th {
+        font-size: 7px;
+      }
+      td {
+        font-size: 7px;
+      }
+
+      .table {
+        width: 100%;
+      }
+      .cart-img {
+        width: 20px;
+        height: 20px;
+      }
+    }
+    @media screen and (max-width: 645px) {
+      .surround-stuff {
+        width: 580px;
+        margin-left: -68px;
+      }
+      .container {
+        width: 60%;
+        margin-left: 60px;
+      }
+      th {
+        font-size: 6px;
+      }
+      td {
+        font-size: 6px;
+      }
+
+      .cart-img {
+        width: 20px;
+        height: 20px;
+      }
+    }
+    @media screen and (max-width: 592px) {
+      .surround-stuff {
+        width: 540px;
+        margin-left: -68px;
+      }
+      .container {
+        width: 60%;
+        margin-left: 60px;
+      }
+      th {
+        font-size: 5px;
+      }
+      td {
+        font-size: 5px;
+      }
+      .tamanho-letra {
+        font-size: 10px;
+      }
+
+      .cart-img {
+        width: 20px;
+        height: 20px;
+      }
+    }
+    @media screen and (max-width: 558px) {
+      .surround-stuff {
+        width: 520px;
+        margin-left: -90px;
+      }
+      .cart-img {
+        width: 15px;
+        height: 15px;
+      }
+      .pedidos {
+        font-size: 18px;
+      }
+      .confirmarLabel {
+        font-size: 9px;
+      }
+    }
+  </style>
+</html>
+
+{% endblock %}

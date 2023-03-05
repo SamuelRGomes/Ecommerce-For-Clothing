@@ -1,0 +1,42 @@
+{% load cart %}
+<form id="pagSeguroSubmit" method="post" class="pagform" target="pagseguro" action="https://pagseguro.uol.com.br/v2/checkout/payment.html">
+  <!-- Campos obrigatórios -->
+  <input name="receiverEmail" type="hidden" value="suporte@lojamodelo.com.br" />
+  <input name="currency" type="hidden" value="BRL" />
+  <!-- Itens do pagamento (ao menos um item é obrigatório) -->
+  {% for produto in products%}
+  <h1>{{produto.price}}.00</h1>
+  <input name="itemId{{forloop.counter}}" type="hidden" value="{{forloop.counter}}" />
+  <input name="itemDescription{{forloop.counter}}" type="hidden" value="{{produto.name}}" />
+  <input name="itemAmount{{forloop.counter}}" type="hidden" value="{{produto.price}}.00" />
+  <input name="itemQuantity{{forloop.counter}}" type="hidden" value="{{produto|cart_quantity:cart}}" />
+  {% endfor %}
+
+  <!-- Código de referência do pagamento no seu sistema (opcional) -->
+  <input name="reference" type="hidden" value="REF1234" />
+
+  <!-- Informações de frete (opcionais) -->
+  <input name="shippingType" id="shippingType" type="hidden" value="2" />
+  <input name="shippingAddressPostalCode" id="shippingAddressPostalCode" type="hidden" value="{{cepDestino}}" />
+  <input name="shippingAddressStreet" id="shippingAddressStreet" type="hidden" value="{{street}}" />
+  <input name="shippingAddressNumber" id="shippingAddressNumber" type="hidden" value="{{number}}" />
+  <input name="shippingAddressComplement" id="shippingAddressComplement" type="hidden" value="{{complement}}" />
+  <input name="shippingAddressDistrict" id="shippingAddressDistrict" type="hidden" value="{{neighborhood}}" />
+  <input name="shippingAddressCity" id="shippingAddressCity" type="hidden" value="{{city}}" />
+  <input name="shippingAddressState" id="shippingAddressState" type="hidden" value="{{region}}" />
+  <input name="shippingAddressCountry" id="shippingAddressCountry" type="hidden" value="BR" />
+  <input name="itemShippingCost1" id="itemShippingCost1" type="hidden" value="{{frete}}" />
+
+  <!-- Dados do comprador (opcionais) -->
+  <input name="senderName" type="hidden" value="{{cliente_nome}}" />
+  <input name="senderAreaCode" type="hidden" value="{{cliente_areacode}}" />
+  <input name="senderPhone" type="hidden" value="{{cliente_phone}}" />
+  <input name="senderEmail" type="hidden" value="{{cliente_email}}" />
+
+  <!-- submit do form (obrigatório) -->
+  <input alt="Pague com PagSeguro" name="submit" type="image" src="https://p.simg.uol.com.br/out/pagseguro/i/botoes/pagamentos/120x53-pagar.gif" />
+</form>
+<script>
+  submitButton = document.getElementById("pagSeguroSubmit");
+  submitButton.submit();
+</script>
