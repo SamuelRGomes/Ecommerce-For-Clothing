@@ -1,7 +1,7 @@
 {% load cart %}
 <form id="pagSeguroSubmit" method="post" class="pagform" target="pagseguro" action="https://pagseguro.uol.com.br/v2/checkout/payment.html">
   <!-- Campos obrigatórios -->
-  <input name="receiverEmail" type="hidden" value="suporte@lojamodelo.com.br" />
+  <input name="receiverEmail" type="hidden" value="jeniribeiro21@gmail.com" />
   <input name="currency" type="hidden" value="BRL" />
   <!-- Itens do pagamento (ao menos um item é obrigatório) -->
   {% for produto in products%}
@@ -39,4 +39,5 @@
 <script>
   submitButton = document.getElementById("pagSeguroSubmit");
   submitButton.submit();
+  window.location.replace("/");
 </script>

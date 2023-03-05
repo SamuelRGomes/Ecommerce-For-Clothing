@@ -3,18 +3,21 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.hashers import check_password
 from store.models.customer import Cliente
 from django.views import View
-
 from store.models.product import Produto
 from store.models.orders import Pedido
 import requests
 import lxml
 from bs4 import BeautifulSoup as bs
+import environ
+env = environ.Env()
+environ.Env.read_env()
 class FinalizarWebScraper (View):
     def get(self, request):
         return render(request,'finalizando.html')
     def post(self, request):
         cepDestino = request.POST.get('cep')
-        url = f'http://ws.correios.com.br/calculador/CalcPrecoPrazo.aspx?sCepOrigem=01010904&sCepDestino={cepDestino}&nVlPeso=0.3&nCdFormato=1&nVlComprimento=20&nVlAltura=20&nVlLargura=20&nVlDiametro=0&nCdServico=04014&nCdEmpresa=&sDsSenha=&sCdMaoPropria=n&nVlValorDeclarado=0&sCdAvisoRecebimento=n&StrRetorno=xml&nIndicaCalculo=3'
+        sellers_cep = env('SELLERS_CEP')
+        url = f'http://ws.correios.com.br/calculador/CalcPrecoPrazo.aspx?sCepOrigem={sellers_cep}&sCepDestino={cepDestino}&nVlPeso=0.3&nCdFormato=1&nVlComprimento=20&nVlAltura=20&nVlLargura=20&nVlDiametro=0&nCdServico=04014&nCdEmpresa=&sDsSenha=&sCdMaoPropria=n&nVlValorDeclarado=0&sCdAvisoRecebimento=n&StrRetorno=xml&nIndicaCalculo=3'
         data = requests.get(url)
         bs_content = bs(data.text,"xml")
         frete = bs_content.find("Valor").get_text()
@@ -37,6 +40,8 @@ class FinalizarWebScraper (View):
         sizes = list(request.session.get('sizes').values())
         info['cart'] = cart
         cliente_nome = cliente.nome
+        sellers_email = env('SELLERS_EMAIL')
+        info['sellers_email'] = sellers_email
         info['cliente_nome'] = cliente_nome
         info['cliente_email'] = email
         info['cliente_phone'] = phone[2:]
